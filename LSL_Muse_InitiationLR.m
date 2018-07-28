@@ -1,6 +1,7 @@
 %% Initiate LSL Muse connection and recording
-function [lib, info, outlet] = LSL_Muse_Initiation
-    % Display connecting and initializing message
+function [lib, info, outlet] = LSL_Muse_Initiation(usingMuse)
+if usingMuse    
+% Display connecting and initializing message
     disp('Connecting Muse and initializing stream...');
 
     % Connect to Muse
@@ -14,14 +15,12 @@ function [lib, info, outlet] = LSL_Muse_Initiation
     
     %Wait for Impedence Check
     clc;
-    disp('Press ENTER when you have completed impedence');
+    disp('Press ENTER when you have completed impedence and have started recording in Lab Recorder');
     pause;
-    
-    % Begin recording
-    clc;
-    disp('Initiating recording...');
-    record_path = which('LSL_Record.scpt');
-    system(['osascript ' record_path]);
-    WaitSecs(10);
-    clc;
+   
+else
+    lib = [];
+    info = [];
+    outlet = [];
+end
 end

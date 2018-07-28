@@ -1,0 +1,27 @@
+function [mean_theta, mean_alpha, mean_beta] = LSL_Muse_FFT(inlet)
+% Pulling Data
+fftOutput = [];
+fftResults = [];
+
+%Pull sample
+[vec,ts] = inlet.pull_sample(); %Pull data
+
+%Join data
+data_stream = [data_stream; vec]; % Ammend new data
+data_stream = data_stream(end-99:end,:); % Cut old data
+
+%Calculate FFTs
+fftOutput = fft(data_stream',[],2); %Conduct FFT
+fftOutput = fftOutput/length(data_stream); %Normalize FFT
+fftOutput = abs(fftOutput(:,1:length(data_stream)/2,:))*2;
+fftOutput(:,1,:) = [];
+fftResults = squeeze(mean(fftOutput,3));
+
+
+frequencyResolution = 256/length(data_stream); %Frequency resolution
+frequencies = frequencyResolution:frequencyResolution:length(fftOutput)*frequencyResolution;
+
+mean_theta = mean(fftResults(1,2:3)); % Extract mean theta
+mean_alpha = mean(fftResults(1,3:5)); % Extract mean alpha
+mean_beta = mean(fftResults(1,5:12)); % Extract mean beta
+end
